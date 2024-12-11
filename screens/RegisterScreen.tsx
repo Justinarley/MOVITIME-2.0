@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useState } from 'react'
+import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import axios from 'axios'
 
-// Importar los tipos del stack
 type AuthStackParamList = {
-    Login: undefined;
-    Register: undefined;
+    Login: undefined
+    Register: undefined
 };
 
-type RegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Register'>;
+type RegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Register'>
 
-const RegisterScreen: React.FC = () => {
+export default function RegisterScreen() {
     const [form, setForm] = useState({
         cedula: '',
         nombre: '',
@@ -19,6 +19,7 @@ const RegisterScreen: React.FC = () => {
         correo: '',
         celular: '',
         fechaNacimiento: '',
+        password: '',
     });
 
     const [acceptTerms, setAcceptTerms] = useState(false);
@@ -28,13 +29,31 @@ const RegisterScreen: React.FC = () => {
         setForm((prevForm) => ({ ...prevForm, [field]: value }));
     };
 
-    const handleRegister = () => {
-        if (!acceptTerms) {
-            alert('Debe aceptar los términos y condiciones');
+    const handleRegister = async () => {
+        // Validar que todos los campos estén completos
+        const isFormValid = Object.values(form).every((value) => value.trim() !== '');
+        if (!isFormValid) {
+            Alert.alert('Error', 'Todos los campos son requeridos');
             return;
         }
-        alert('Registro exitoso');
-        navigation.navigate('Login');
+
+        // Validar que se acepten los términos y condiciones
+        if (!acceptTerms) {
+            Alert.alert('Error', 'Debe aceptar los términos y condiciones');
+            return;
+        }
+
+        try {
+            const apiUrl = 'http://localhost:9000/api/users/register';
+            const response = await axios.post(apiUrl, form);
+            Alert.alert('Registro exitoso', response.data);
+            navigation.navigate('Login');
+        } catch (error: any) {
+            // Manejar errores y mostrar mensaje
+            const errorMessage =
+                error.response?.data || 'Hubo un problema al procesar el registro';
+            Alert.alert('Error', errorMessage);
+        }
     };
 
     return (
@@ -53,6 +72,7 @@ const RegisterScreen: React.FC = () => {
                         correo: 'Correo electrónico',
                         celular: 'Número de celular',
                         fechaNacimiento: 'Fecha de nacimiento (YYYY-MM-DD)',
+                        password: 'Contraseña',
                     };
 
                     return (
@@ -68,8 +88,11 @@ const RegisterScreen: React.FC = () => {
                                     ? 'email-address'
                                     : field === 'celular'
                                     ? 'phone-pad'
+                                    : field === 'password'
+                                    ? 'default'
                                     : 'default'
                             }
+                            secureTextEntry={field === 'password'}
                         />
                     );
                 })}
@@ -177,6 +200,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textDecorationLine: 'underline',
     },
-});
-
-export default RegisterScreen;
+})

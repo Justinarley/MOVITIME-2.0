@@ -1,23 +1,26 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from '../screens/LoginScreen'; // Asegúrate de que la ruta sea correcta
-import RegisterScreen from '../screens/RegisterScreen'; // Asegúrate de que la ruta sea correcta
-import HomeScreen from '../screens/HomeScreen';
-import CarteleraScreen from '../screens/CarteleraScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import { createStackNavigator } from '@react-navigation/stack'
+import LoginScreen from '../screens/LoginScreen'
+import RegisterScreen from '../screens/RegisterScreen'
+import HomeScreen from '../screens/HomeScreen'
+import CarteleraScreen from '../screens/CarteleraScreen'
+import ProfileScreen from '../screens/ProfileScreen'
 
-// Define los tipos de las rutas
+
 type AuthStackParamList = { 
-  Login: undefined;
-  Register: undefined;
-  Home: undefined;
-  Cartelera: undefined;
-  Profile: undefined;
+  Login: undefined
+  Register: undefined
+  Home: undefined
+  Cartelera: undefined
+  Profile: undefined
 };
 
-const AuthStack = createStackNavigator<AuthStackParamList>();
+type AuthNavigatorProps = {
+  isAuthenticated: boolean
+}
 
-const AuthNavigator: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
+const AuthStack = createStackNavigator<AuthStackParamList>()
+
+export default function AuthNavigator({ isAuthenticated }: AuthNavigatorProps) {
   return (
     <AuthStack.Navigator
       initialRouteName={isAuthenticated ? "Home" : "Login"}
@@ -31,7 +34,5 @@ const AuthNavigator: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated
       <AuthStack.Screen name="Cartelera" component={CarteleraScreen} />
       <AuthStack.Screen name="Profile" component={ProfileScreen} />
     </AuthStack.Navigator>
-  );
-};
-
-export default AuthNavigator;
+  )
+}

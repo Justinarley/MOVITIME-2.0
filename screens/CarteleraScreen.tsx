@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react'
 import {
   View,
   Text,
@@ -8,23 +8,22 @@ import {
   FlatList,
   Modal,
   Button as RNButton,
-  TouchableOpacity,  // Importar TouchableOpacity
-} from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Menu from '../components/Menu';
+  TouchableOpacity,
+} from 'react-native'
+import { Calendar } from 'react-native-calendars'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import Menu from '../components/Menu'
 
-// Tipos del stack de navegación
 type AuthStackParamList = {
-  Login: undefined;
-  Register: undefined;
-  Home: undefined;
-  Cartelera: undefined;
+  Login: undefined
+  Register: undefined
+  Home: undefined
+  Cartelera: undefined
 };
 
-type CarteleraScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Cartelera'>;
-type HomeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Home'>;
+type CarteleraScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Cartelera'>
+type HomeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Home'>
 
 const carouselData = [
   { image: require('../assets/images/WyD.jpg'), rating: 'Todo Público', status: 'En cartelera' },
@@ -33,22 +32,22 @@ const carouselData = [
   { image: require('../assets/images/Robot.jpg'), rating: 'Mayor de 12 años', status: 'En preventa' },
   { image: require('../assets/images/Moana.jpg'), rating: 'Todo Público', status: 'En cartelera' },
   { image: require('../assets/images/Intensamente.jpg'), rating: 'Todo Público', status: 'En cartelera' },
-];
+]
 
-const CarteleraScreen: React.FC = () => {
-  const navigation = useNavigation<CarteleraScreenNavigationProp>();
-  const homeNavigation = useNavigation<HomeScreenNavigationProp>();
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTab, setSelectedTab] = useState<'cartelera' | 'proximamente'>('cartelera');
-  const [searchQuery, setSearchQuery] = useState('');
+export default function  CarteleraScreen() {
+  const navigation = useNavigation<CarteleraScreenNavigationProp>()
+  const homeNavigation = useNavigation<HomeScreenNavigationProp>()
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false)
+  const [selectedDate, setSelectedDate] = useState('')
+  const [selectedTab, setSelectedTab] = useState<'cartelera' | 'proximamente'>('cartelera')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleCalendarToggle = () => setIsCalendarVisible(!isCalendarVisible);
 
   const handleDateSelect = (day: any) => {
-    setSelectedDate(day.dateString);
-    setIsCalendarVisible(false); // Cerrar el calendario después de seleccionar la fecha
-  };
+    setSelectedDate(day.dateString)
+    setIsCalendarVisible(false)
+  }
 
   const renderMovieItem = ({ item }: { item: any }) => (
     <View style={styles.movieItem}>
@@ -56,7 +55,7 @@ const CarteleraScreen: React.FC = () => {
       <Text style={styles.movieRating}>{item.rating}</Text>
       <Text style={styles.movieStatus}>{item.status}</Text>
     </View>
-  );
+  )
 
   return (
     <View style={styles.container}>
@@ -119,8 +118,8 @@ const CarteleraScreen: React.FC = () => {
         contentContainerStyle={styles.moviesContainer}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -200,6 +199,4 @@ const styles = StyleSheet.create({
     padding: 10,
     color: '#FFF',
   },
-});
-
-export default CarteleraScreen;
+})

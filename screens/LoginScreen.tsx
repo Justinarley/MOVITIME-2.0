@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from 'react'
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 
 type AuthStackParamList = {
-  Login: undefined;
-  Register: undefined;
-  Home: undefined;
+  Login: undefined
+  Register: undefined
+  Home: undefined
 };
 
-type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
+type LoginScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>
 
-const LoginScreen: React.FC = () => {
-  const navigation = useNavigation<LoginScreenNavigationProp>();
+export default function LoginScreen() {
+  const navigation = useNavigation<LoginScreenNavigationProp>()
   
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [correo, setCorreo] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async () => {
-    // Simulación de la autenticación
-    if (username === 'usuario' && password === 'contraseña') {
-      // Si la autenticación es exitosa, guardamos un token
-      await AsyncStorage.setItem('authToken', 'some_token');
-      navigation.navigate('Home');  // Navega a Home o a la pantalla principal
-    } else {
-      // Si las credenciales no son correctas
-      alert('Credenciales incorrectas');
+    try {
+      const response = await axios.post('http://localhost:9000/api/users/login', {
+        correo: correo,
+        password: password
+      })
+      
+      // Si la autenticación es exitosa
+      if (response.status === 200) {
+        await AsyncStorage.setItem('authToken', 'some_token')
+        navigation.navigate('Home')
+      }
+    } catch (error) {
+      alert('Credenciales incorrectas o error en el servidor')
     }
   };
 
@@ -39,8 +45,8 @@ const LoginScreen: React.FC = () => {
       />
       <Text style={styles.title}>MOVITIME</Text>
       <TextInput
-        value={username}
-        onChangeText={setUsername}
+        value={correo}
+        onChangeText={setCorreo}
         placeholder="Usuario"
         placeholderTextColor="#AAA"
         style={styles.input}
@@ -64,13 +70,13 @@ const LoginScreen: React.FC = () => {
       </Text>
       <TouchableOpacity 
         style={styles.button} 
-        onPress={handleLogin}  // Usamos handleLogin para verificar las credenciales
+        onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -124,6 +130,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-});
-
-export default LoginScreen;
+})

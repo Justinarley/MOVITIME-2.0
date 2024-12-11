@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react'
 import {
   View,
   Text,
@@ -9,23 +9,23 @@ import {
   FlatList,
   Animated,
   TouchableOpacity,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Menu from '../components/Menu';
+} from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import Menu from '../components/Menu'
 
 // Tipos del stack de navegación
 type AuthStackParamList = {
-  Login: undefined;
-  Register: undefined;
-  Home: undefined;
-  Cartelera: undefined;
+  Login: undefined
+  Register: undefined
+  Home: undefined
+  Cartelera: undefined
 };
 
-type HomeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Home'>
 
-const HomeScreen: React.FC = () => {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+export default function HomeScreen() {
+  const navigation = useNavigation<HomeScreenNavigationProp>()
 
   const carouselData = [
     require('../assets/images/WyD.jpg'),
@@ -34,34 +34,34 @@ const HomeScreen: React.FC = () => {
     require('../assets/images/Robot.jpg'),
     require('../assets/images/Moana.jpg'),
     require('../assets/images/Intensamente.jpg'),
-  ];
+  ]
 
   const promotions = [
     require('../assets/images/PROMO1.png'),
     require('../assets/images/PROMO2.jpg'),
     require('../assets/images/PROMO3.png'),
     require('../assets/images/PROMO4.png'),
-  ];
+  ]
 
   // Carrusel automático
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const flatListRef = useRef<FlatList>(null);
+  const scrollX = useRef(new Animated.Value(0)).current
+  const flatListRef = useRef<FlatList>(null)
 
   // Variable para el índice actual
-  const currentIndex = useRef(0);
+  const currentIndex = useRef(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       // Avanzar al siguiente índice de forma circular
-      currentIndex.current = (currentIndex.current + 1) % carouselData.length;
+      currentIndex.current = (currentIndex.current + 1) % carouselData.length
       flatListRef.current?.scrollToIndex({
         index: currentIndex.current,
         animated: true,
-      });
-    }, 3000); // Mueve las imágenes cada 3 segundos
+      })
+    }, 2000)
 
-    return () => clearInterval(interval);
-  }, [carouselData.length]);
+    return () => clearInterval(interval)
+  }, [carouselData.length])
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -120,8 +120,8 @@ const HomeScreen: React.FC = () => {
         ))}
       </View>
     </ScrollView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -211,6 +211,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 12,
   },
-});
-
-export default HomeScreen;
+})
