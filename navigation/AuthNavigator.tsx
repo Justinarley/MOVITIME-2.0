@@ -1,24 +1,23 @@
-import { createStackNavigator } from '@react-navigation/stack'
-import LoginScreen from '../screens/LoginScreen'
-import RegisterScreen from '../screens/RegisterScreen'
-import HomeScreen from '../screens/HomeScreen'
-import CarteleraScreen from '../screens/CarteleraScreen'
-import ProfileScreen from '../screens/ProfileScreen'
+import { createStackNavigator } from "@react-navigation/stack";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../screens/HomeScreen";
+import CarteleraScreen from "../screens/CarteleraScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
-
-type AuthStackParamList = { 
-  Login: undefined
-  Register: undefined
-  Home: undefined
-  Cartelera: undefined
-  Profile: undefined
+type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+  Cartelera: undefined;
+  Profile: undefined;
 };
 
 type AuthNavigatorProps = {
-  isAuthenticated: boolean
-}
+  isAuthenticated: boolean;
+};
 
-const AuthStack = createStackNavigator<AuthStackParamList>()
+const AuthStack = createStackNavigator<AuthStackParamList>();
 
 export default function AuthNavigator({ isAuthenticated }: AuthNavigatorProps) {
   return (
@@ -28,11 +27,18 @@ export default function AuthNavigator({ isAuthenticated }: AuthNavigatorProps) {
         headerShown: false,
       }}
     >
-      <AuthStack.Screen name="Login" component={LoginScreen} />
-      <AuthStack.Screen name="Register" component={RegisterScreen} />
-      <AuthStack.Screen name="Home" component={HomeScreen} />
-      <AuthStack.Screen name="Cartelera" component={CarteleraScreen} />
-      <AuthStack.Screen name="Profile" component={ProfileScreen} />
+      {isAuthenticated ? (
+        <>
+          <AuthStack.Screen name="Home" component={HomeScreen} />
+          <AuthStack.Screen name="Cartelera" component={CarteleraScreen} />
+          <AuthStack.Screen name="Profile" component={ProfileScreen} />
+        </>
+      ) : (
+        <>
+          <AuthStack.Screen name="Login" component={LoginScreen} />
+          <AuthStack.Screen name="Register" component={RegisterScreen} />
+        </>
+      )}
     </AuthStack.Navigator>
-  )
+  );
 }
