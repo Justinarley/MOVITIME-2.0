@@ -47,7 +47,7 @@ export default function LoginScreen() {
       <TextInput
         value={correo}
         onChangeText={setCorreo}
-        placeholder="Usuario"
+        placeholder="Correo"
         placeholderTextColor="#AAA"
         style={styles.input}
       />
